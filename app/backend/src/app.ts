@@ -1,7 +1,5 @@
 import * as express from 'express';
-import 'express-async-errors';
-
-import errorMiddleware from './middlewares/errorMiddleware';
+import router from './routes';
 
 class App {
   public app: express.Express;
@@ -13,10 +11,6 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
-
-    // Não remova esse middleware de erro, mas fique a vontade para customizá-lo
-    // Mantenha ele sempre como o último middleware a ser chamado
-    this.app.use(errorMiddleware);
   }
 
   private config():void {
@@ -29,6 +23,8 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+
+    this.app.use(router);
   }
 
   public start(PORT: string | number): void {
